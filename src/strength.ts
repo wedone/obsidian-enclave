@@ -12,7 +12,7 @@ export interface StrengthResult {
 	label: string;
 }
 
-const LABELS = ["Very weak", "Weak", "Fair", "Good", "Strong"] as const;
+const LABELS = ["很弱", "弱", "一般", "良好", "强"] as const;
 
 export function estimateStrength(password: string): StrengthResult {
 	if (!password) return { score: 0, label: LABELS[0] };

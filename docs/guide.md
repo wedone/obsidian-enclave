@@ -1,151 +1,136 @@
-# Enclave guide
+# Enclave 指南
 
-Everything about [Enclave](https://github.com/flo-wolf/obsidian-enclave) in detail: the two kinds
-of password, locking notes and folders, commands, what is and isn't encrypted, how the encryption
-works, the settings, and the interface for sync plugins.
+详尽介绍 [Enclave](https://github.com/flo-wolf/obsidian-enclave) 的一切：两种密码、锁定
+笔记与文件夹、命令、哪些内容加密哪些不加密、加密的工作原理、设置，以及面向同步插件的
+接口。
 
-**There is no password recovery.** If you forget a password, the notes locked with it can't be
-opened anymore. Keep a backup of anything you can't afford to lose.
+**没有密码找回。** 如果你忘记了某个密码，用该密码锁定的笔记就再也打不开了。任何不能
+失去的内容，请留一份备份。
 
-## Installation
+## 安装
 
-Enclave needs Obsidian 1.13 or later.
+Enclave 需要 Obsidian 1.13 或更高版本。
 
-**From the community plugins** (recommended)
+**从第三方插件安装**（推荐）
 
-1. In Obsidian, open **Settings → Community plugins** and select **Browse**.
-2. Search for **Enclave**, then select **Install** and **Enable**.
+1. 在 Obsidian 中打开 **设置 → 第三方插件**，选择 **浏览**。
+2. 搜索 **Enclave**，然后选择 **安装** 和 **启用**。
 
-Or open [Enclave in the Obsidian community directory](https://community.obsidian.md/plugins/enclave).
+或者打开 [Obsidian 社区目录中的 Enclave](https://community.obsidian.md/plugins/enclave)。
 
-**With BRAT** (new versions before they reach the directory)
+**用 BRAT 安装**（在进入目录之前体验新版本）
 
-1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) from the
-   community plugins.
-2. In BRAT, add the repository `flo-wolf/obsidian-enclave`.
+1. 从第三方插件中安装 [BRAT](https://github.com/TfTHacker/obsidian42-brat)。
+2. 在 BRAT 中添加仓库 `flo-wolf/obsidian-enclave`。
 
-**Manually**
+**手动安装**
 
-1. Download `main.js`, `manifest.json` and `styles.css` from the
-   [latest release](https://github.com/flo-wolf/obsidian-enclave/releases/latest).
-2. Copy them into `<your-vault>/.obsidian/plugins/enclave/`.
-3. Enable **Enclave** under **Settings → Community plugins**.
+1. 从[最新发布](https://github.com/flo-wolf/obsidian-enclave/releases/latest)下载
+   `main.js`、`manifest.json` 和 `styles.css`。
+2. 把它们复制到 `<your-vault>/.obsidian/plugins/enclave/`。
+3. 在 **设置 → 第三方插件** 中启用 **Enclave**。
 
-If your vault syncs through [Envoy](https://github.com/flo-wolf/obsidian-envoy), iCloud, or
-Obsidian Sync with "Installed community plugins" turned on, the plugin reaches your other devices,
-including iOS, with the vault.
+如果你的库通过 [Envoy](https://github.com/flo-wolf/obsidian-envoy)、iCloud，或开启了
+「已安装的第三方插件」的 Obsidian Sync 同步，插件就会随库一起到达你的其他设备，包括 iOS。
 
-## Usage
+## 使用
 
-### Two kinds of password
+### 两种密码
 
-- **Vault password**: one password for all your everyday locked notes, for
-  convenience. You enter it once per session; it's kept in memory and forgotten
-  after 30 minutes unused (configurable) or when Obsidian quits.
-- **Separate password**: a password for one note, or one group of notes, as an
-  extra barrier. It's meant for notes that shouldn't open just because you're
-  already working in Obsidian, so by default you enter it every time.
+- **库密码**：为了方便，所有日常锁定的笔记共用一个密码。每个会话只需输入一次；它保存在
+  内存中，闲置 30 分钟后（可配置）或在 Obsidian 退出时被忘记。
+- **独立密码**：为某一篇笔记或某一组笔记设置的密码，作为额外的屏障。它适用于那些不应该
+  仅仅因为你在 Obsidian 里工作就能打开的笔记，所以默认情况下每次都要输入。
 
-**Remember passwords for the session** in the settings changes this: **Vault
-password only** (default), **Vault and separate passwords**, or **Don't
-remember**, which asks for every password every time. Remembered passwords are
-never written to disk.
+设置中的 **在当前会话中记住密码** 会改变这一点：**仅库密码**（默认）、**库密码和独立密码**，
+或 **不记住**（每次都要输入每个密码）。记住的密码绝不会写入磁盘。
 
-You choose the vault password the first time you lock a note with it. After
-that, a mistyped vault password is rejected right away instead of locking notes
-under a password you didn't mean. The same goes for a folder's separate
-password. Enclave remembers a small encrypted check for each, never the password
-itself (see [Password checks](#password-checks)).
+你第一次用库密码锁定笔记时，就是在那时设置库密码。此后，输错的库密码会被立即拒绝，而
+不会用一个你并非本意的密码去锁定笔记。文件夹的独立密码也是如此。Enclave 为每个密码
+只保存一小段加密的校验数据，从不保存密码本身（见 [密码校验](#密码校验)）。
 
-### Lock and unlock a note
+### 锁定和解锁笔记
 
-Right-click a note in the file explorer:
+在文件浏览器中右键点击一篇笔记：
 
-| Menu item | What it does |
+| 菜单项 | 作用 |
 |---|---|
-| **Enclave: lock note** | Encrypts the note with the vault password. |
-| **Enclave: lock with separate password** | Encrypts the note with a password of its own. |
-| **Enclave: unlock note** | Decrypts the note so you can read and edit it. It locks again when you leave it. |
-| **Enclave: permanently decrypt note** | Removes the encryption for good and turns it back into a normal note. |
+| **Enclave: 锁定笔记** | 用库密码加密该笔记。 |
+| **Enclave: 使用独立密码锁定** | 用该笔记自己的密码加密它。 |
+| **Enclave: 解锁笔记** | 解密该笔记，以便你阅读和编辑。离开它时，它会再次锁定。 |
+| **Enclave: 永久解密笔记** | 彻底移除加密，把它恢复为普通笔记。 |
 
-The lock icon in the left ribbon turns orange while any note is unlocked; clicking
-it then locks them all again, each with its own password. When nothing is
-unlocked, it unlocks the current note if it's locked, or locks it with the vault
-password if it isn't.
+左侧边栏的锁图标在有任何笔记解锁时显示为橙色；此时点击它会把它们全部重新锁定，每篇用
+各自的密码。当没有任何笔记处于解锁状态时，如果当前笔记是锁定的，它会解锁该笔记；如果不
+是，则用库密码锁定它。
 
-### Lock a folder
+### 锁定文件夹
 
-Right-click a folder → **Enclave: lock folder** (vault password) or **Enclave:
-lock folder with separate password** (one password for the whole folder). This
-locks every note in it, including subfolders, and keeps the folder locked:
+右键点击文件夹 → **Enclave: 锁定文件夹**（库密码）或 **Enclave: 使用独立密码锁定文件夹**
+（整个文件夹共用一个密码）。这会锁定其中的每一篇笔记，包括子文件夹里的笔记，并让该文件夹
+保持锁定状态：
 
-- **A note moved into the folder** brings up a prompt to lock it too. For a
-  vault-password folder you confirm; for a separate-password folder you enter
-  that folder's password. Only the folder's own password is accepted, even if
-  notes with other passwords sit in it.
-  Moving several notes, or a whole folder, asks once.
-- **A note created in the folder** is locked the first time you leave it.
-- **Renaming or moving the folder** keeps it locked.
-- **Notes you permanently decrypt** inside the folder stay decrypted.
+- **移入该文件夹的笔记** 会弹出提示，询问是否也锁定它。对于使用库密码的文件夹，你只需确认；
+  对于使用独立密码的文件夹，你需要输入该文件夹的密码。只有该文件夹自己的密码会被接受，
+  即使其中还放着用其他密码锁定的笔记。一次移动多篇笔记或整个文件夹时，只会询问一次。
+- **在该文件夹中新建的笔记** 会在你第一次离开它时被锁定。
+- **重命名或移动该文件夹** 会保持其锁定状态。
+- **你在该文件夹内永久解密的笔记** 会保持解密状态。
 
-Each note keeps its own password, so a folder can mix both kinds: lock one note
-with a separate password, then lock the folder, and the folder lock leaves that
-note alone.
+每篇笔记保留自己的密码，所以一个文件夹可以混用两种：先用独立密码锁定一篇笔记，再锁定该
+文件夹，文件夹锁定不会动那篇笔记。
 
-**Unlocking a folder** (right-click → **Enclave: unlock all notes in folder**) is
-temporary, like unlocking a note: the folder stays locked and its notes lock
-again when you leave them. Enclave asks for the vault password if any notes use
-it, then for a separate password if any notes use one. Every note that password
-opens is unlocked; notes with a different password stay locked and are listed in
-the summary. Cancel the separate-password prompt to skip them.
+**解锁文件夹**（右键 → **Enclave: 解锁文件夹中的所有笔记**）是临时的，就像解锁单篇笔记
+一样：文件夹仍保持锁定，其中的笔记在你离开后又会重新锁定。如果有笔记使用库密码，
+Enclave 会先索取库密码；如果有笔记使用独立密码，再索取一个独立密码。用该密码能打开的笔记
+都会被解锁；使用其他密码的笔记保持锁定，并会在汇总中列出。取消独立密码的输入提示即可跳过
+它们。
 
-**Permanently decrypting a folder** (right-click → **Enclave: permanently decrypt
-folder**) removes the encryption from its notes and stops keeping it locked.
+**永久解密文件夹**（右键 → **Enclave: 永久解密文件夹**）会移除其笔记的加密，并停止让该
+文件夹保持锁定。
 
-### Lock several notes
+### 锁定多篇笔记
 
-Select several notes, right-click, and choose **lock selected notes** or **lock
-selected notes with separate password** (one password for all of them). This
-locks just those notes; unlike a folder, nothing is kept locked afterwards.
+选中多篇笔记，右键点击，然后选择 **Enclave: 锁定选中的笔记（库密码）** 或
+**Enclave: 使用独立密码锁定选中的笔记**
+（所有笔记共用一个密码）。这只会锁定这些笔记；与文件夹不同，之后不会有任何内容保持锁定。
 
-### Commands
+### 命令
 
-All actions are also in the command palette:
+所有操作也都在命令面板中：
 
-| Command | |
+| 命令 | |
 |---|---|
-| Lock note (vault password) | Current note |
-| Lock note with a separate password | Current note |
-| Unlock note | Current note |
-| Permanently decrypt note (remove encryption) | Current note |
-| Lock all currently-unlocked notes | Re-locks everything you have open right now |
-| Lock every note in the vault (vault password) | Whole vault |
-| Unlock every locked note in the vault | Whole vault |
-| Permanently decrypt every locked note in the vault | Whole vault |
-| Lock all notes and forget passwords | Locks every unlocked note, then clears every password from memory |
-| Secure notes left exposed (after a crash) | Only shown when needed, see [below](#while-a-note-is-unlocked) |
+| 锁定笔记（库密码） | 当前笔记 |
+| 使用独立密码锁定笔记 | 当前笔记 |
+| 解锁笔记 | 当前笔记 |
+| 永久解密笔记（移除加密） | 当前笔记 |
+| 锁定所有当前已解锁的笔记 | 重新锁定你此刻打开的所有笔记 |
+| 锁定库中所有笔记（库密码） | 整个库 |
+| 解锁库中所有已锁定的笔记 | 整个库 |
+| 永久解密库中所有已锁定的笔记 | 整个库 |
+| 锁定所有笔记并忘记密码 | 锁定所有已解锁的笔记，然后清除内存中的所有密码 |
+| 重新加密崩溃后遗留的明文笔记 | 仅在需要时显示，见[下文](#笔记解锁期间) |
 
-While notes are unlocked, the status bar shows how many (for example
-"1 unlocked"). Click it to lock them all. It disappears once everything is
-locked.
+有笔记处于解锁状态时，状态栏会显示数量（例如「1 篇已解锁」）。点击它可以全部锁定。当所有
+笔记都锁定后，它会消失。
 
-## What is and isn't encrypted
+## 加密与不加密的内容
 
-| Encrypted | Not encrypted |
+| 加密 | 不加密 |
 |---|---|
-| The note's text | The note's file name |
-| The note's own properties (frontmatter) | Folder names |
-| | Attachments: images, PDFs and any other non-Markdown file |
-| | Notes while they are unlocked (see below) |
+| 笔记的文字 | 笔记的文件名 |
+| 笔记自身的属性（前置元数据） | 文件夹名称 |
+| | 附件：图片、PDF 以及任何其他非 Markdown 文件 |
+| | 笔记在解锁期间（见下文） |
 
-Enclave only encrypts Markdown notes. Locking a folder does not touch the other
-files in it.
+Enclave 只加密 Markdown 笔记。锁定文件夹不会影响其中的其他文件。
 
-## How it works
+## 工作原理
 
-### A locked note on disk
+### 磁盘上的已锁定笔记
 
-Locking replaces the note's contents with this, in the same `.md` file:
+锁定会用下面的内容替换笔记的内容，仍然放在同一个 `.md` 文件里：
 
 ````markdown
 ---
@@ -157,127 +142,109 @@ lock-scope: vault
 ```
 ````
 
-- `locked` marks the note as encrypted. `lock-scope` says which password it
-  needs: `vault` or `note` (separate).
-- `ct` holds the entire original note, properties included, encrypted.
-- In Obsidian, the block shows as a card saying the note is locked, with an
-  **Unlock** button. A locked note can't be typed into; unlock it to edit.
-- Because it's still a plain text file, a locked note syncs, backs up and works
-  with version control like any other note.
+- `locked` 表示该笔记已加密。`lock-scope` 说明它需要哪种密码：`vault` 或 `note`（独立
+  密码）。
+- `ct` 保存着整篇原始笔记，包括属性，已加密。
+- 在 Obsidian 中，这个代码块显示为一张卡片，说明笔记已锁定，并带有一个 **解锁** 按钮。
+  已锁定的笔记无法输入文字；要编辑请先解锁。
+- 因为它仍然是一个纯文本文件，已锁定的笔记能像其他笔记一样同步、备份，并配合版本控制使用。
 
-### Encryption
+### 加密
 
-- A 256-bit AES-GCM key is derived from your password with PBKDF2 (SHA-256,
-  310,000 iterations by default).
-- Every note gets its own random salt and IV, so two notes with the same text
-  and password still look completely different.
-- AES-GCM is authenticated: a wrong password or a tampered file fails with an
-  error instead of producing garbage.
-- Before the plain text is overwritten, the encrypted result is decrypted and
-  compared to the original. If they differ, the lock is cancelled and the note
-  is left as it was.
-- Everything uses the Web Crypto API built into Obsidian, on desktop and mobile.
+- 256 位的 AES-GCM 密钥由你的密码通过 PBKDF2 派生（SHA-256，默认 310,000 次迭代）。
+- 每篇笔记都有自己随机的 salt 和 IV，所以两篇文字和密码都相同的笔记，看起来也完全不同。
+- AES-GCM 带认证：密码错误或文件被篡改时会报错，而不是产生乱码。
+- 在明文被覆盖之前，会先解密加密结果并与原文比对。如果两者不一致，就取消这次锁定，笔记
+  保持原样。
+- 全部使用 Obsidian 内置的 Web Crypto API，桌面端和移动端都是如此。
 
-### While a note is unlocked
+### 笔记解锁期间
 
-Unlocking writes the plain text back to the file so you can edit it normally.
-That means **an unlocked note is readable on disk and by your sync service**
-until it is locked again. Enclave keeps that window short:
+解锁会把明文写回文件，这样你就能正常编辑。这意味着，在它再次被锁定之前，
+**已解锁的笔记在磁盘上、对你的同步服务都是可读的**。Enclave 会让这个窗口尽量短：
 
-- It re-locks a note when you navigate away from it.
-- It re-locks notes that have been idle for 5 minutes (configurable).
-- It re-locks everything when Obsidian quits, and when it's hidden: on mobile
-  whenever the app goes to the background, on desktop when you minimize it or
-  switch to another space (you can turn that off in the settings).
+- 当你从某篇笔记切换走时，它会重新锁定该笔记。
+- 闲置 5 分钟的笔记会被重新锁定（可配置）。
+- Obsidian 退出时会重新锁定所有内容；Obsidian 隐藏时也是如此：在移动端是应用进入后台时，
+  在桌面端是你最小化窗口或切换到另一个空间时（你可以在设置中关闭这一项）。
 
-If Obsidian crashes while notes are unlocked, Enclave notices on the next start
-and offers **Secure notes left exposed** to encrypt them again.
+如果 Obsidian 在笔记处于解锁状态时崩溃，Enclave 会在下次启动时发现，
+并提供命令 **重新加密崩溃后遗留的明文笔记** 来重新加密它们。
 
-### Password checks
+### 密码校验
 
-To recognise a mistyped password, Enclave keeps a check for the vault password
-and for each separate-password folder in its settings file
-(`.obsidian/plugins/enclave/data.json`). A check is a short fixed text encrypted
-with the password, exactly like a note, so it is just as hard to brute-force as
-any locked note and reveals nothing more. The passwords themselves are never
-stored.
+为了识别输错的密码，Enclave 会在其设置文件（`.obsidian/plugins/enclave/data.json`）中为库
+密码和每个使用独立密码的文件夹各保存一份校验数据。校验数据是一段用该密码加密的简短固定
+文字，与笔记完全一样，所以它和任何已锁定的笔记一样难以暴力破解，也不会泄露更多信息。密码
+本身从不保存。
 
-If you already had vault notes before checks existed, the vault check is created
-the first time the vault password successfully unlocks one of them.
+如果你在校验机制出现之前就已经有使用库密码的笔记，那么库密码的校验会在第一次成功解锁其中
+一篇笔记时创建。
 
-### Changing the vault password
+### 更改库密码
 
-**Settings → Vault password → Change** lets you choose a new vault password the
-next time you lock a note. Notes locked with the old one still open with the old
-one: if the new password doesn't open a note, Enclave asks for the earlier
-password. When that note locks again while you're using the new vault password,
-it's re-encrypted with the new one, so old notes move over as you use them.
+**设置 → 密码与加密 → 库密码 → 更改** 让你在下一次锁定笔记时设置新的库密码。用旧密码锁定的笔记仍然用
+旧密码打开：如果新密码打不开某篇笔记，Enclave 会要求输入更早的那个密码。当你正在使用新库
+密码时该笔记再次被锁定，它就会用新密码重新加密，所以旧笔记会随着你的使用逐步迁移过来。
 
-### Permanent decryption
+### 永久解密
 
-Permanently decrypting a note restores it as a normal note and removes it from
-Enclave's tracking. It will not be locked again unless you lock it yourself.
+永久解密一篇笔记会把它恢复为普通笔记，并从 Enclave 的跟踪中移除。除非你自己再次锁定它，
+否则它不会再被锁定。
 
-### Syncing with other plugins
+### 与其他插件同步
 
-While a note is unlocked, its plain text is on disk, so a sync tool could upload it.
-[Envoy](https://github.com/flo-wolf/obsidian-envoy) uses the interface below so that never happens.
-Enclave offers
-sync plugins a small interface at `app.plugins.getPlugin("enclave").api` (see
-[`src/api.ts`](../src/api.ts)) to prevent that:
+笔记解锁期间，它的明文就在磁盘上，所以同步工具可能会上传它。
+[Envoy](https://github.com/flo-wolf/obsidian-envoy) 使用下面这个接口来避免这种情况。
+Enclave 在 `app.plugins.getPlugin("enclave").api` 为同步插件提供了一个小接口（见
+[`src/api.ts`](../src/api.ts)）：
 
-- **`holdReason(path)`** says whether a note must not be uploaded right now: it's unlocked, a crash
-  left it unlocked, or it's waiting to be locked in a locked folder.
-- **`isIntentionallyPlain(path)`** says whether you made a note plain on purpose (permanently
-  decrypted it, or chose not to lock it when you moved it into a locked folder).
-- **`lockAll()`** and **`onLocked()`** let a sync plugin lock everything before syncing, or sync a
-  note as soon as it's locked.
-- **`openForMerge()`** lets a sync plugin merge conflicting versions of a locked note: Enclave
-  decrypts them in memory only, asks for any password it doesn't have, and encrypts the result
-  again. The sync plugin never sees a password.
+- **`holdReason(path)`** 说明某篇笔记此刻是否不能被上传：它处于解锁状态、崩溃后仍处于解锁
+  状态，或者它在一个已锁定的文件夹里正等待被锁定。
+- **`isIntentionallyPlain(path)`** 说明你是否是有意让某篇笔记保持明文（永久解密了它，或者
+  在把它移入已锁定文件夹时选择不锁定它）。
+- **`lockAll()`** 和 **`onLocked()`** 让同步插件在同步前锁定所有内容，或在某篇笔记一被锁定
+  时就同步它。
+- **`openForMerge()`** 让同步插件合并一篇已锁定笔记的冲突版本：Enclave 只在内存中解密这些
+  版本，索取它没有的密码，然后重新加密结果。同步插件始终看不到密码。
 
-When you lock a note without having changed it, Enclave writes back its exact earlier encrypted
-version, so sync tools see no change and two devices can't conflict over it.
+当你没有改动笔记就锁定它时，Enclave 会写回它之前那份完全相同的加密版本，所以同步工具看不到
+变化，两台设备也不会因此产生冲突。
 
-## Settings
+## 设置
 
-Settings are stored in the vault and sync with it. Phones and tablets can have
-their own values for remembering passwords and auto-locking (see **Use different
-settings on phones and tablets**); both sets sync, so you can change the mobile
-values from your desktop.
+设置保存在库中，并随库同步。手机和平板可以为记住密码和自动锁定使用各自的值
+（见 **在手机与平板上使用不同的设置**）；两套值都会同步，所以你可以从桌面端修改移动端的值。
 
-| Setting | Default | |
+| 设置 | 默认值 | |
 |---|---|---|
-| Lock when leaving a note | On | Re-lock a note when you switch to another note. |
-| Hide properties of locked notes | On | Hide the properties box on locked notes, which only shows Enclave's own `locked` and `lock-scope` properties. |
-| Lock when Obsidian is hidden | On | Desktop only: re-lock unlocked notes when you minimize Obsidian or switch to another space or full-screen app. On mobile, notes always re-lock when the app goes to the background. |
-| Auto-lock after inactivity | 5 min | Re-lock idle unlocked notes. `0` turns it off. |
-| Remember passwords for the session | Vault password only | Which passwords stay in memory after you've entered them: the vault password only, the vault and separate passwords, or none. Never written to disk. |
-| Forget passwords after | 30 min | How long remembered passwords stay in memory without being used. `0` keeps them until Obsidian quits. |
-| Use different settings on phones and tablets | Off | Give phones and tablets their own **remember passwords**, **forget passwords after** and **auto-lock after inactivity** values; the regular ones then apply to desktop only. |
-| Key derivation iterations | 310,000 | PBKDF2 iterations for newly locked notes. Higher is slower to unlock and slower to brute-force. |
-| Verify before overwriting | On | The round-trip check described above. Roughly doubles the time a lock takes. |
-| Vault password | Not chosen | Whether you've chosen a vault password. **Change** lets you choose a new one the next time you lock a note; see [Changing the vault password](#changing-the-vault-password). |
-| Passwords in memory | | What's unlocked and which passwords are remembered on this device, and when that ends on its own. **Lock and forget** does it right away, like the **Lock all notes and forget passwords** command; you never need to click it for notes to lock. |
-| Locked folders | None | Folders you've [locked](#lock-a-folder), with their kind of password. Deleting one from the list stops locking new notes there; its notes stay as they are. |
+| 离开笔记时锁定 | 开启 | 当你切换到另一篇笔记时重新锁定当前笔记。 |
+| 隐藏已锁定笔记的属性 | 开启 | 在已锁定的笔记上隐藏属性栏，它只显示 Enclave 自己的 `locked` 和 `lock-scope` 属性。 |
+| Obsidian 隐藏时锁定 | 开启 | 仅桌面端：当你最小化 Obsidian，或切换到另一个空间或全屏应用时，重新锁定已解锁的笔记。在移动端，应用进入后台时笔记总是会被重新锁定。 |
+| 闲置后自动锁定 | 5 分钟 | 重新锁定闲置的已解锁笔记。`0` 表示关闭。 |
+| 在当前会话中记住密码 | 仅库密码 | 输入之后哪些密码留在内存中：仅库密码、库密码和独立密码，或者都不留。绝不写入磁盘。 |
+| 多久后忘记密码 | 30 分钟 | 记住的密码在未被使用的情况下留在内存中的时长。`0` 表示一直保留到 Obsidian 退出。 |
+| 在手机与平板上使用不同的设置 | 关闭 | 让手机和平板拥有独立的 **在移动端记住密码**、**移动端多久后忘记密码** 与 **移动端闲置后自动锁定** 数值；此后上面的常规设置只适用于桌面端。 |
+| 密钥派生迭代次数 | 310,000 | 新锁定笔记使用的 PBKDF2 迭代次数。数值越高，解锁越慢，暴力破解也越慢。 |
+| 覆盖前校验 | 开启 | 上文所述的往返校验。大约会让锁定耗时翻倍。 |
+| 库密码 | 未设置 | 你是否已经设置库密码。**更改** 让你在下一次锁定笔记时选择新密码；见[更改库密码](#更改库密码)。 |
+| 内存中的密码 | | 在此设备上哪些笔记已解锁、记住了哪些密码，以及这些状态何时自动结束。**锁定并忘记** 会立即执行，效果和 **锁定所有笔记并忘记密码** 命令一样；笔记本来就会自动锁定，不需要靠它。 |
+| 已锁定的文件夹 | 无 | 你[锁定](#锁定文件夹)过的文件夹，以及它们使用的密码类型。从列表中删除一个只会停止在那里锁定新笔记；其中的笔记保持原样。 |
 
-## Development
+## 开发
 
 ```bash
-npm install      # install dependencies
-npm run dev      # rebuild main.js on every change
-npm run build    # type-check and build a production bundle
-npm run deploy   # build and copy the plugin into $OBSIDIAN_VAULT
-npm test         # run the test suite
+npm install      # 安装依赖
+npm run dev      # 每次改动后重新构建 main.js
+npm run build    # 类型检查并构建生产版本
+npm run deploy   # 构建并把插件复制到 $OBSIDIAN_VAULT
+npm test         # 运行测试
 ```
 
-To try a change before releasing it, run
-`OBSIDIAN_VAULT=/path/to/vault npm run deploy`, then turn Enclave off and on
-again under Settings → Community plugins (or run **Reload app without saving**).
-This overwrites the copy BRAT installed; BRAT puts the released version back the
-next time it updates.
+要在发布前试用某项改动，运行 `OBSIDIAN_VAULT=/path/to/vault npm run deploy`，然后在
+**设置 → 第三方插件** 中把 Enclave 关闭再打开（或者运行 **重新加载应用而不保存**）。这会
+覆盖 BRAT 安装的那份副本；BRAT 下次更新时会把已发布的版本放回去。
 
-To publish a release, set the version in `manifest.json`, `package.json` and
-`versions.json`, then push a tag with exactly that version (for example
-`1.0.1`, no `v`). A GitHub Action builds the plugin and attaches `main.js`,
-`manifest.json` and `styles.css` to the release, which is what BRAT installs.
+要发布一个版本，请在 `manifest.json`、`package.json` 和 `versions.json` 中设置版本号，然后
+推送一个与该版本号完全一致的标签（例如 `1.0.1`，不加 `v`）。GitHub Action 会构建插件，并把
+`main.js`、`manifest.json` 和 `styles.css` 附加到该发布中，这正是 BRAT 所安装的内容。

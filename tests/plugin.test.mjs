@@ -402,7 +402,7 @@ test("a plain note moved into a protected folder is locked after one prompt", as
 	await plugin.promptMovedIn();
 
 	assert.equal(plugin.moveInPrompts.length, 1);
-	assert.match(plugin.moveInPrompts[0], /2 notes were moved into "private"/);
+	assert.match(plugin.moveInPrompts[0], /2 篇笔记已移入 "private"/);
 	assert.ok(isLocked(files.get("private/idea.md").content));
 	assert.ok(isLocked(files.get("private/todo.md").content));
 });
@@ -464,7 +464,7 @@ test("moving an unprotected folder into a protected one asks about its notes", a
 
 	assert.deepEqual(plugin.settings.protectedFolders, [{ path: "private", scope: "vault" }]);
 	assert.equal(plugin.moveInPrompts.length, 1);
-	assert.match(plugin.moveInPrompts[0], /2 notes were moved/);
+	assert.match(plugin.moveInPrompts[0], /2 篇笔记已移入/);
 });
 
 test("a note created in a protected folder is locked when you leave it", async () => {
@@ -926,7 +926,7 @@ test("with a remembered folder password, a note moved in is locked after a confi
 
 	assert.equal(plugin.prompts, 1, "no password prompt");
 	assert.equal(plugin.moveInPrompts.length, 1, "but a confirmation");
-	assert.match(plugin.moveInPrompts[0], /locked with a separate password/);
+	assert.match(plugin.moveInPrompts[0], /使用独立密码锁定/);
 	assert.ok(isLocked(files.get("private/idea.md").content));
 
 	await plugin.lockAndForget();
@@ -1061,19 +1061,19 @@ test("the settings tab can tell which passwords are in memory", async () => {
 	const notePw = "noteSecret123";
 	const { plugin, files } = await separateNoteSetup(notePw);
 	plugin.settings.rememberPasswords = "all";
-	assert.match(plugin.rememberedPasswordsSummary(), /^Nothing is unlocked/);
+	assert.match(plugin.rememberedPasswordsSummary(), /^当前这台设备上没有笔记处于解锁状态/);
 
 	plugin.passwordQueue = [notePw];
 	await plugin.unlockNote(files.get("private/a.md"));
 	assert.equal(
 		plugin.rememberedPasswordsSummary(),
-		"1 note is unlocked and Enclave remembers a separate password for 1 note or folder temporarily. The note locks again when you leave it or when Obsidian is hidden or closed. Passwords are forgotten after 30 minutes unused. You don't need to do anything; Lock and forget just does it now."
+		"1 篇笔记处于解锁状态，Enclave 还会临时记住独立密码（1 篇笔记或文件夹）。笔记会再次锁定：离开时或 Obsidian 被隐藏或关闭时。这些密码会在闲置 30 分钟后被忘记。无需你操作，「锁定并忘记」会立即完成。"
 	);
 
 	await plugin.lockAll(true);
 	assert.equal(
 		plugin.rememberedPasswordsSummary(),
-		"Enclave remembers a separate password for 1 note or folder temporarily. Passwords are forgotten after 30 minutes unused. You don't need to do anything; Lock and forget just does it now."
+		"Enclave 会临时记住独立密码（1 篇笔记或文件夹）。这些密码会在闲置 30 分钟后被忘记。无需你操作，「锁定并忘记」会立即完成。"
 	);
 });
 
@@ -1088,7 +1088,7 @@ test("lock and forget locks unlocked notes first, so no password is left", async
 	await plugin.unlockNote(files.get("a.md"));
 	assert.equal(
 		plugin.rememberedPasswordsSummary(),
-		"1 note is unlocked and Enclave remembers the vault password temporarily. The note locks again when you leave it, after 5 minutes without use, or when Obsidian is hidden or closed. The password is forgotten after 30 minutes unused. You don't need to do anything; Lock and forget just does it now."
+		"1 篇笔记处于解锁状态，Enclave 还会临时记住库密码。笔记会再次锁定：离开时、闲置 5 分钟后或 Obsidian 被隐藏或关闭时。该密码会在闲置 30 分钟后被忘记。无需你操作，「锁定并忘记」会立即完成。"
 	);
 
 	await plugin.lockAndForget();
@@ -1096,7 +1096,7 @@ test("lock and forget locks unlocked notes first, so no password is left", async
 	assert.ok(isLocked(files.get("a.md").content), "the unlocked note was locked with its password first");
 	assert.equal(plugin.vaultPassword, null);
 	assert.equal(plugin.getUnlockedMap().size, 0);
-	assert.match(plugin.rememberedPasswordsSummary(), /^Nothing is unlocked/);
+	assert.match(plugin.rememberedPasswordsSummary(), /^当前这台设备上没有笔记处于解锁状态/);
 });
 
 // ---- api for sync plugins ----

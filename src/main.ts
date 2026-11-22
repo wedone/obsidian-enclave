@@ -180,7 +180,7 @@ export default class EnclavePlugin extends Plugin {
 
 		this.addSettingTab(new EnclaveSettingTab(this.app, this));
 
-		this.ribbonEl = this.addRibbonIcon("lock", "Enclave: toggle lock on current note", async () => {
+		this.ribbonEl = this.addRibbonIcon("lock", "Enclave: 切换当前笔记的锁定状态", async () => {
 			await this.toggleActiveNote();
 		});
 
@@ -287,56 +287,56 @@ export default class EnclavePlugin extends Plugin {
 	private registerCommands(): void {
 		this.addCommand({
 			id: "lock-note",
-			name: "Lock note (vault password)",
+			name: "锁定笔记（库密码）",
 			checkCallback: (checking) => this.commandOnFile(checking, (f) => this.lockNote(f, "vault")),
 		});
 		this.addCommand({
 			id: "lock-note-separate-password",
-			name: "Lock note with a separate password",
+			name: "使用独立密码锁定笔记",
 			checkCallback: (checking) => this.commandOnFile(checking, (f) => this.lockNote(f, "note")),
 		});
 		this.addCommand({
 			id: "unlock-note",
-			name: "Unlock note",
+			name: "解锁笔记",
 			checkCallback: (checking) => this.commandOnFile(checking, (f) => this.unlockNote(f)),
 		});
 		this.addCommand({
 			id: "permanently-decrypt-note",
-			name: "Permanently decrypt note (remove encryption)",
+			name: "永久解密笔记（移除加密）",
 			checkCallback: (checking) => this.commandOnFile(checking, (f) => this.permanentlyDecryptNote(f)),
 		});
 		this.addCommand({
 			id: "lock-all",
-			name: "Lock all currently-unlocked notes",
+			name: "锁定所有当前已解锁的笔记",
 			callback: () => this.lockAll(),
 		});
 
 		this.addCommand({
 			id: "lock-vault",
-			name: "Lock every note in the vault (vault password)",
+			name: "锁定库中所有笔记（库密码）",
 			callback: () => this.lockFolder(this.app.vault.getRoot()),
 		});
 
 		this.addCommand({
 			id: "unlock-vault",
-			name: "Unlock every locked note in the vault",
+			name: "解锁库中所有已锁定的笔记",
 			callback: () => this.unlockFolder(this.app.vault.getRoot()),
 		});
 
 		this.addCommand({
 			id: "permanently-decrypt-vault",
-			name: "Permanently decrypt every locked note in the vault",
+			name: "永久解密库中所有已锁定的笔记",
 			callback: () => this.permanentlyDecryptFolder(this.app.vault.getRoot()),
 		});
 
 		this.addCommand({
 			id: "forget-vault-password",
-			name: "Lock all notes and forget passwords",
+			name: "锁定所有笔记并忘记密码",
 			callback: () => void this.lockAndForget(),
 		});
 		this.addCommand({
 			id: "secure-exposed",
-			name: "Secure notes left exposed (after a crash)",
+			name: "重新加密崩溃后遗留的明文笔记",
 			checkCallback: (checking) => {
 				if (this.exposed.length === 0) return false;
 				if (!checking) void this.secureExposed();
@@ -475,25 +475,25 @@ export default class EnclavePlugin extends Plugin {
 	private addFileMenuItems(menu: Menu, file: TFile): void {
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock note")
+				.setTitle("Enclave: 锁定笔记")
 				.setIcon("lock")
 				.onClick(() => this.lockNote(file, "vault"))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock with separate password")
+				.setTitle("Enclave: 使用独立密码锁定")
 				.setIcon("lock")
 				.onClick(() => this.lockNote(file, "note"))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: unlock note")
+				.setTitle("Enclave: 解锁笔记")
 				.setIcon("unlock")
 				.onClick(() => this.unlockNote(file))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: permanently decrypt note")
+				.setTitle("Enclave: 永久解密笔记")
 				.setIcon("unlock")
 				.onClick(() => this.permanentlyDecryptNote(file))
 		);
@@ -506,20 +506,20 @@ export default class EnclavePlugin extends Plugin {
 		if (!hasNotes && folder.isRoot()) return;
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock folder")
+				.setTitle("Enclave: 锁定文件夹")
 				.setIcon("lock")
 				.onClick(() => this.lockFolder(folder))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock folder with separate password")
+				.setTitle("Enclave: 使用独立密码锁定文件夹")
 				.setIcon("lock")
 				.onClick(() => this.lockFolder(folder, "note"))
 		);
 		if (hasNotes) {
 			menu.addItem((item) =>
 				item
-					.setTitle("Enclave: unlock all notes in folder")
+					.setTitle("Enclave: 解锁文件夹中的所有笔记")
 					.setIcon("unlock")
 					.onClick(() => this.unlockFolder(folder))
 			);
@@ -527,7 +527,7 @@ export default class EnclavePlugin extends Plugin {
 		if (hasNotes || isProtected) {
 			menu.addItem((item) =>
 				item
-					.setTitle("Enclave: permanently decrypt folder")
+					.setTitle("Enclave: 永久解密文件夹")
 					.setIcon("unlock")
 					.onClick(() => this.permanentlyDecryptFolder(folder))
 			);
@@ -535,28 +535,28 @@ export default class EnclavePlugin extends Plugin {
 	}
 
 	private addFilesMenuItems(menu: Menu, files: TFile[]): void {
-		const desc = `${files.length} selected note(s)`;
+		const desc = `${files.length} 篇选中的笔记`;
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock selected notes (vault password)")
+				.setTitle("Enclave: 锁定选中的笔记（库密码）")
 				.setIcon("lock")
 				.onClick(() => this.lockFiles(files, desc))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: lock selected notes with separate password")
+				.setTitle("Enclave: 使用独立密码锁定选中的笔记")
 				.setIcon("lock")
 				.onClick(() => this.lockFiles(files, desc, "note"))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: unlock selected notes")
+				.setTitle("Enclave: 解锁选中的笔记")
 				.setIcon("unlock")
 				.onClick(() => this.unlockFiles(files, desc))
 		);
 		menu.addItem((item) =>
 			item
-				.setTitle("Enclave: permanently decrypt selected notes")
+				.setTitle("Enclave: 永久解密选中的笔记")
 				.setIcon("unlock")
 				.onClick(() => this.permanentlyDecryptFiles(files, desc))
 		);
@@ -573,12 +573,12 @@ export default class EnclavePlugin extends Plugin {
 
 		const card = el.createDiv({ cls: "enclave-card" });
 		setIcon(card.createDiv({ cls: "enclave-card-icon" }), "lock");
-		card.createDiv({ cls: "enclave-card-title", text: "This note is locked" });
+		card.createDiv({ cls: "enclave-card-title", text: "这篇笔记已锁定" });
 		card.createDiv({
 			cls: "enclave-card-desc",
-			text: scope === "note" ? "Encrypted with a separate password" : "Encrypted with the vault password",
+			text: scope === "note" ? "已使用独立密码加密" : "已使用库密码加密",
 		});
-		const button = card.createEl("button", { cls: "mod-cta", text: "Unlock" });
+		const button = card.createEl("button", { cls: "mod-cta", text: "解锁" });
 		button.addEventListener("click", () => {
 			const file = path ? this.app.vault.getAbstractFileByPath(path) : null;
 			if (file instanceof TFile) void this.unlockNote(file);
@@ -594,11 +594,11 @@ export default class EnclavePlugin extends Plugin {
 		}
 		const file = this.app.workspace.getActiveFile();
 		if (!file) {
-			new Notice("Enclave: open a note first.");
+			new Notice("Enclave: 请先打开一篇笔记。");
 			return;
 		}
 		if (file.extension !== "md") {
-			new Notice(`Enclave only locks markdown (.md) notes; "${file.name}" is a .${file.extension} file.`);
+			new Notice(`Enclave 只能锁定 Markdown（.md）笔记；"${file.name}" 是 .${file.extension} 文件。`);
 			return;
 		}
 		const content = await this.readLiveContent(file);
@@ -699,7 +699,7 @@ export default class EnclavePlugin extends Plugin {
 			await fn();
 		} catch (e) {
 			console.error("Enclave: operation failed", e);
-			new Notice("Enclave: operation failed. See console for details.");
+			new Notice("Enclave: 操作失败，详情见控制台。");
 		} finally {
 			this.inFlight.delete(path);
 		}
@@ -714,23 +714,23 @@ export default class EnclavePlugin extends Plugin {
 		const info = this.unlocked.get(file.path);
 		if (info && (scope === "vault" || info.scope === scope)) {
 			await this.relock(file.path);
-			if (isLocked(await this.readLiveContent(file))) new Notice(`Enclave: locked "${file.basename}".`);
+			if (isLocked(await this.readLiveContent(file))) new Notice(`Enclave: 已锁定 "${file.basename}"。`);
 			return;
 		}
 
 		const ran = await this.withFileLock(file.path, async () => {
 			if (isLocked(await this.readLiveContent(file))) {
-				new Notice("Enclave: that note is already locked.");
+				new Notice("Enclave: 该笔记已经是锁定状态。");
 				return;
 			}
 
 			const password =
 				scope === "note"
 					? await this.promptPassword({
-							title: "Lock note with a separate password",
-							description: `"${file.basename}" will need this exact password to unlock. ${this.separatePasswordHint()} There is no recovery.`,
+							title: "使用独立密码锁定笔记",
+							description: `"${file.basename}" 需要使用这个密码才能解锁。${this.separatePasswordHint()}密码无法找回。`,
 							confirm: true,
-							cta: "Lock",
+							cta: "锁定",
 						})
 					: await this.ensureVaultPassword(true);
 			if (!password) return;
@@ -741,24 +741,24 @@ export default class EnclavePlugin extends Plugin {
 				const payload = await this.seal(content, password, scope, this.settings.iterations);
 				const written = await this.writeContent(file, content, buildLockedNote(payload));
 				if (!written) {
-					new Notice(`Enclave: "${file.basename}" changed while locking — left unlocked.`);
+					new Notice(`Enclave: 锁定过程中 "${file.basename}" 发生变化，已保持解锁。`);
 					return;
 				}
 				this.unlocked.delete(file.path);
 				await this.persist();
 				this.updateStatusBar();
-				new Notice(`Enclave: locked "${file.basename}".`);
+				new Notice(`Enclave: 已锁定 "${file.basename}"。`);
 			} catch (e) {
 				if (e instanceof SelfCheckError) {
 					console.error("Enclave: encryption self-check failed", e);
-					new Notice("Enclave: encryption self-check failed — note left unlocked to avoid data loss.");
+					new Notice("Enclave: 加密自检失败，为避免数据丢失，笔记保持解锁。");
 				} else {
 					console.error("Enclave: failed to lock note", e);
-					new Notice("Enclave: failed to lock note. See console for details.");
+					new Notice("Enclave: 锁定笔记失败，详情见控制台。");
 				}
 			}
 		});
-		if (!ran) new Notice("Enclave: that note is busy — try again in a moment.");
+		if (!ran) new Notice("Enclave: 该笔记正忙，请稍后再试。");
 	}
 
 	async unlockNote(file: TFile): Promise<void> {
@@ -766,15 +766,15 @@ export default class EnclavePlugin extends Plugin {
 			const content = await this.readLiveContent(file);
 			const payload = parseLockedNote(content);
 			if (!payload || !isLocked(content)) {
-				new Notice("Enclave: that note isn't locked.");
+				new Notice("Enclave: 该笔记不是锁定状态。");
 				return;
 			}
 
 			const scope = payload.scope ?? readScope(content);
 			const opened = await this.openLockedNote(file, payload, scope, {
-				title: "Unlock note",
-				description: `Enter the password for "${file.basename}".`,
-				cta: "Unlock",
+				title: "解锁笔记",
+				description: `输入 "${file.basename}" 的密码。`,
+				cta: "解锁",
 			});
 			if (!opened) return;
 			const { plaintext, password } = opened;
@@ -782,7 +782,7 @@ export default class EnclavePlugin extends Plugin {
 			try {
 				const written = await this.writeContent(file, content, plaintext);
 				if (!written) {
-					new Notice(`Enclave: "${file.basename}" changed while unlocking — try again.`);
+					new Notice(`Enclave: 解锁过程中 "${file.basename}" 发生变化，请重试。`);
 					return;
 				}
 				this.unlocked.set(file.path, {
@@ -796,13 +796,13 @@ export default class EnclavePlugin extends Plugin {
 				if (scope === "vault") await this.vaultPasswordWorked(password);
 				await this.persist();
 				this.updateStatusBar();
-				new Notice(`Enclave: unlocked "${file.basename}".`);
+				new Notice(`Enclave: 已解锁 "${file.basename}"。`);
 			} catch (e) {
 				console.error("Enclave: failed to unlock note", e);
-				new Notice("Enclave: failed to unlock note. See console for details.");
+				new Notice("Enclave: 解锁笔记失败，详情见控制台。");
 			}
 		});
-		if (!ran) new Notice("Enclave: that note is busy — try again in a moment.");
+		if (!ran) new Notice("Enclave: 该笔记正忙，请稍后再试。");
 	}
 
 	/**
@@ -816,10 +816,12 @@ export default class EnclavePlugin extends Plugin {
 			// Case 1: Note is already unlocked in this session (plaintext on disk, tracked in unlocked map)
 			if (this.unlocked.has(file.path)) {
 				const confirmed = await this.confirmBulk(
-					"permanently decrypt",
+					"永久解密",
 					1,
 					`"${file.basename}"`,
-					`"${file.basename}" is currently unlocked. Permanently decrypting will undo encryption, remove it from auto-lock, and keep it as a normal plain markdown note on disk.`
+					`"${file.basename}" 目前处于解锁状态。永久解密会撤销加密、把它从自动锁定中移除，并在磁盘上保留为普通的明文 Markdown 笔记。`,
+					"",
+					true
 				);
 				if (!confirmed) return;
 
@@ -828,7 +830,7 @@ export default class EnclavePlugin extends Plugin {
 				this.markPlain(file.path);
 				await this.persist();
 				this.updateStatusBar();
-				new Notice(`Enclave: permanently decrypted "${file.basename}".`);
+				new Notice(`Enclave: 已永久解密 "${file.basename}"。`);
 				return;
 			}
 
@@ -836,15 +838,15 @@ export default class EnclavePlugin extends Plugin {
 			const content = await this.readLiveContent(file);
 			const payload = parseLockedNote(content);
 			if (!payload || !isLocked(content)) {
-				new Notice(`Enclave: "${file.basename}" is not locked.`);
+				new Notice(`Enclave: "${file.basename}" 不是锁定状态。`);
 				return;
 			}
 
 			const scope = payload.scope ?? readScope(content);
 			const opened = await this.openLockedNote(file, payload, scope, {
-				title: "Permanently decrypt note",
-				description: `Enter the password for "${file.basename}" to permanently remove encryption and restore plaintext.`,
-				cta: "Permanently Decrypt",
+				title: "永久解密笔记",
+				description: `输入 "${file.basename}" 的密码，永久移除加密并恢复明文。`,
+				cta: "永久解密",
 			});
 			if (!opened) return;
 			const { plaintext, password } = opened;
@@ -852,7 +854,7 @@ export default class EnclavePlugin extends Plugin {
 			try {
 				const written = await this.writeContent(file, content, plaintext);
 				if (!written) {
-					new Notice(`Enclave: "${file.basename}" changed while decrypting — try again.`);
+					new Notice(`Enclave: 解密过程中 "${file.basename}" 发生变化，请重试。`);
 					return;
 				}
 				this.unlocked.delete(file.path);
@@ -861,13 +863,13 @@ export default class EnclavePlugin extends Plugin {
 				if (scope === "vault") await this.vaultPasswordWorked(password);
 				await this.persist();
 				this.updateStatusBar();
-				new Notice(`Enclave: permanently decrypted "${file.basename}".`);
+				new Notice(`Enclave: 已永久解密 "${file.basename}"。`);
 			} catch (e) {
 				console.error("Enclave: failed to permanently decrypt note", e);
-				new Notice("Enclave: failed to permanently decrypt note. See console for details.");
+				new Notice("Enclave: 永久解密笔记失败，详情见控制台。");
 			}
 		});
-		if (!ran) new Notice("Enclave: that note is busy — try again in a moment.");
+		if (!ran) new Notice("Enclave: 该笔记正忙，请稍后再试。");
 	}
 
 	/**
@@ -890,13 +892,13 @@ export default class EnclavePlugin extends Plugin {
 		if (plaintext === null && (await this.isCurrentVaultPassword(password))) {
 			password = await this.promptPassword({
 				...ask,
-				description: `"${file.basename}" was locked with a vault password you've since changed. Enter that earlier password.`,
+				description: `"${file.basename}" 使用的是你后来更换过的库密码，请输入当时那个密码。`,
 			});
 			if (!password) return null;
 			plaintext = await this.tryDecrypt(payload, password);
 		}
 		if (plaintext === null) {
-			new Notice("Enclave: incorrect password.");
+			new Notice("Enclave: 密码不正确。");
 			return null;
 		}
 		return { plaintext, password };
@@ -926,7 +928,7 @@ export default class EnclavePlugin extends Plugin {
 		if (!password) return null;
 		const plaintext = await this.tryDecrypt(payload, password);
 		if (plaintext === null) {
-			new Notice("Enclave: incorrect password.");
+			new Notice("Enclave: 密码不正确。");
 			return null;
 		}
 		this.rememberPassword(noteKey(file.path), password);
@@ -989,14 +991,14 @@ export default class EnclavePlugin extends Plugin {
 						: buildLockedNote(await this.seal(content, password, info.scope, info.iterations));
 				const written = await this.writeContent(file, content, next);
 				if (!written) {
-					new Notice(`Enclave: "${file.basename}" changed while locking — left unlocked, will retry.`);
+					new Notice(`Enclave: 锁定过程中 "${file.basename}" 发生变化，已保持解锁，稍后重试。`);
 					return;
 				}
 				this.unlocked.delete(path);
 				await this.persist();
 			} catch (e) {
 				console.error("Enclave: failed to auto-lock note", e);
-				new Notice(`Enclave: could not auto-lock "${file.basename}" — it remains unlocked. See console.`);
+				new Notice(`Enclave: 无法自动锁定 "${file.basename}"，它仍处于解锁状态，详情见控制台。`);
 			} finally {
 				this.updateStatusBar();
 			}
@@ -1008,7 +1010,7 @@ export default class EnclavePlugin extends Plugin {
 		// click / command, silent=false) must not interfere with it. The quit/
 		// background re-lock paths pass silent=true and are allowed to force through.
 		if (this.bulkActive && !silent) {
-			new Notice("Enclave: a bulk operation is in progress.");
+			new Notice("Enclave: 正在执行批量操作。");
 			return;
 		}
 		const paths = Array.from(this.unlocked.keys());
@@ -1017,7 +1019,7 @@ export default class EnclavePlugin extends Plugin {
 		}
 		if (!silent) {
 			new Notice(
-				paths.length ? `Enclave: locked ${paths.length} note(s).` : "Enclave: nothing to lock."
+				paths.length ? `Enclave: 已锁定 ${paths.length} 篇笔记。` : "Enclave: 没有需要锁定的笔记。"
 			);
 		}
 	}
@@ -1056,23 +1058,23 @@ export default class EnclavePlugin extends Plugin {
 		count: number,
 		where: string,
 		customMessage?: string,
-		extra = ""
+		extra = "",
+		/** True for the modes that leave plaintext on disk for good. */
+		permanent = false
 	): Promise<boolean> {
 		return new ConfirmModal(this.app, {
-			title: `Enclave: ${verb} ${count} note${count === 1 ? "" : "s"}?`,
+			title: `Enclave: ${verb} ${count} 篇笔记？`,
 			message:
 				customMessage ??
-				`This will ${verb} ${count} note${count === 1 ? "" : "s"} in ${where}.${
-					verb.includes("decrypt")
-						? " Plain markdown will be restored to disk and auto-lock will no longer re-encrypt."
-						: ""
+				`这会${verb} ${count} 篇笔记（${where}）。${
+					permanent ? "明文 Markdown 会写回磁盘，自动锁定不会再加密它们。" : ""
 				}${extra}`,
-			cta: verb.includes("decrypt") ? "Permanently Decrypt" : "Proceed",
+			cta: permanent ? "永久解密" : "继续",
 		}).ask();
 	}
 
 	private describeFolder(folder: TFolder): string {
-		return folder.isRoot() ? "the entire vault" : `"${folder.path}"`;
+		return folder.isRoot() ? "整个库" : `"${folder.path}"`;
 	}
 
 	/**
@@ -1098,10 +1100,10 @@ export default class EnclavePlugin extends Plugin {
 			}
 		}
 		if (work.length === 0) {
-			new Notice("Enclave: no unlocked notes to lock here.");
+			new Notice("Enclave: 这里没有已解锁的笔记可锁定。");
 			return true;
 		}
-		if ((opts.confirm ?? true) && !(await this.confirmBulk("encrypt", work.length, targetDescription))) {
+		if ((opts.confirm ?? true) && !(await this.confirmBulk("锁定", work.length, targetDescription))) {
 			return false;
 		}
 
@@ -1109,19 +1111,19 @@ export default class EnclavePlugin extends Plugin {
 			? await opts.password()
 			: scope === "note"
 				? await this.promptPassword({
-						title: "Lock with a separate password",
-						description: `All ${work.length} note(s) will need this exact password to unlock. ${this.separatePasswordHint()} There is no recovery.`,
+						title: "使用独立密码锁定",
+						description: `全部 ${work.length} 篇笔记都需要这个密码才能解锁。${this.separatePasswordHint()}密码无法找回。`,
 						confirm: true,
-						cta: "Lock",
+						cta: "锁定",
 					})
 				: await this.ensureVaultPassword(true);
 		if (!password) {
 			// A custom password step explains its own refusals.
-			if (!opts.password) new Notice("Enclave: cancelled — no notes were changed.");
+			if (!opts.password) new Notice("Enclave: 已取消，没有笔记被修改。");
 			return false;
 		}
 
-		const progress = new Notice(`Enclave: locking ${work.length} note(s)…`, 0);
+		const progress = new Notice(`Enclave: 正在锁定 ${work.length} 篇笔记…`, 0);
 		let locked = 0;
 		let changed = 0;
 		let failed = 0;
@@ -1157,7 +1159,7 @@ export default class EnclavePlugin extends Plugin {
 				progress.hide();
 			}
 		}
-		new Notice(this.bulkSummary("locked", locked, { changed, failed, skipped }, trouble));
+		new Notice(this.bulkSummary("锁定", locked, { changed, failed, skipped }, trouble));
 		return true;
 	}
 
@@ -1173,7 +1175,7 @@ export default class EnclavePlugin extends Plugin {
 		}
 		if (folder.isRoot()) {
 			if (unlockedCount > 0) await this.lockFiles(notes, this.describeFolder(folder), scope);
-			else new Notice("Enclave: no unlocked notes to lock here.");
+			else new Notice("Enclave: 这里没有已解锁的笔记可锁定。");
 			return;
 		}
 		if (!(await this.confirmFolderLock(folder.path, scope, unlockedCount))) return;
@@ -1193,21 +1195,21 @@ export default class EnclavePlugin extends Plugin {
 		await this.setProtection(folder.path, scope, check);
 		if (folderPassword) this.rememberPassword(folderKey(folder.path), folderPassword);
 		if (unlockedCount === 0) {
-			new Notice(`Enclave: "${folder.path}" is locked. Notes moved or created there will be locked too.`);
+			new Notice(`Enclave: 已锁定 "${folder.path}"。移入或新建到这里的笔记也会被锁定。`);
 		}
 	}
 
 	/** Explain what locking a folder does and ask to go ahead. Overridable for tests. */
 	protected confirmFolderLock(path: string, scope: EnclaveScope, unlockedCount: number): Promise<boolean> {
-		const password = scope === "note" ? "the folder's own password" : "the vault password";
+		const password = scope === "note" ? "该文件夹自己的密码" : "库密码";
 		const now =
 			unlockedCount > 0
-				? `This encrypts the ${unlockedCount === 1 ? "unlocked note" : `${unlockedCount} unlocked notes`} in "${path}" and its subfolders with ${password}.`
-				: `"${path}" has no unlocked notes right now.`;
+				? `这会用${password}加密 "${path}" 及其子文件夹中 ${unlockedCount} 篇已解锁的笔记。`
+				: `"${path}" 目前没有已解锁的笔记。`;
 		return new ConfirmModal(this.app, {
-			title: `Enclave: lock folder "${path}"?`,
-			message: `${now} The folder then stays locked: notes moved into it or created in it are locked with ${password} too. Notes that are already locked keep their own password.`,
-			cta: "Lock folder",
+			title: `Enclave: 锁定文件夹 "${path}"？`,
+			message: `${now} 之后该文件夹会保持锁定：移入其中的笔记和新建在其中的笔记也会用${password}锁定。已经锁定的笔记仍使用各自的密码。`,
+			cta: "锁定文件夹",
 		}).ask();
 	}
 
@@ -1251,8 +1253,8 @@ export default class EnclavePlugin extends Plugin {
 		let notePassword: string | null = null;
 		if (set.note.length > 0) {
 			notePassword = await this.promptPassword({
-				title: "Enter separate password",
-				description: `${set.note.length} note(s) here are locked with a separate password. Enter it to ${action} every note it opens; notes with a different password stay locked. Cancel to skip them.`,
+				title: "输入独立密码",
+				description: `这里有 ${set.note.length} 篇笔记使用独立密码锁定。输入该密码即可${action}它能打开的每一篇笔记；使用其他密码的笔记会保持锁定。取消则跳过它们。`,
 				cta,
 			});
 		}
@@ -1279,7 +1281,7 @@ export default class EnclavePlugin extends Plugin {
 
 	/** Suffix for a bulk summary when the separate-password prompt was cancelled. */
 	private skippedSeparateNote(count: number): string {
-		return count ? ` Skipped ${count} separate-password note(s).` : "";
+		return count ? ` 已跳过 ${count} 篇使用独立密码的笔记。` : "";
 	}
 
 	/**
@@ -1291,18 +1293,18 @@ export default class EnclavePlugin extends Plugin {
 		const set = await this.collectLocked(files);
 		const total = set.vault.length + set.note.length;
 		if (total === 0) {
-			new Notice("Enclave: no locked notes to unlock here.");
+			new Notice("Enclave: 这里没有已锁定的笔记可解锁。");
 			return;
 		}
-		if (!(await this.confirmBulk("decrypt (write plaintext for)", total, targetDescription))) return;
+		if (!(await this.confirmBulk("解密", total, targetDescription, undefined, "", true))) return;
 
-		const bulk = await this.prepareBulkDecrypt(set, "unlock", "Unlock");
+		const bulk = await this.prepareBulkDecrypt(set, "解锁", "解锁");
 		if (!bulk) {
-			new Notice("Enclave: cancelled — no notes were changed.");
+			new Notice("Enclave: 已取消，没有笔记被修改。");
 			return;
 		}
 
-		const progress = new Notice(`Enclave: unlocking ${bulk.work.length} note(s)…`, 0);
+		const progress = new Notice(`Enclave: 正在解锁 ${bulk.work.length} 篇笔记…`, 0);
 		let unlockedCount = 0;
 		let vaultDone = 0;
 		let wrongPassword = 0;
@@ -1360,7 +1362,7 @@ export default class EnclavePlugin extends Plugin {
 			}
 		}
 		new Notice(
-			this.bulkSummary("unlocked", unlockedCount, { wrongPassword, otherPassword, changed, failed, skipped }, trouble) +
+			this.bulkSummary("解锁", unlockedCount, { wrongPassword, otherPassword, changed, failed, skipped }, trouble) +
 				this.skippedSeparateNote(bulk.skippedSeparate)
 		);
 	}
@@ -1381,26 +1383,26 @@ export default class EnclavePlugin extends Plugin {
 		const lockedCount = set.vault.length + set.note.length;
 		const totalEligible = lockedCount + set.alreadyUnlocked.length;
 		if (totalEligible === 0) {
-			new Notice("Enclave: no encrypted notes found to decrypt here.");
+			new Notice("Enclave: 这里没有找到可解密的加密笔记。");
 			return true;
 		}
 
-		if (!(await this.confirmBulk("permanently decrypt", totalEligible, targetDescription, undefined, extra))) {
+		if (!(await this.confirmBulk("永久解密", totalEligible, targetDescription, undefined, extra, true))) {
 			return false;
 		}
 
 		let bulk: BulkDecrypt = { work: [], vaultPassword: null, skippedSeparate: 0 };
 		if (lockedCount > 0) {
-			const prepared = await this.prepareBulkDecrypt(set, "permanently decrypt", "Permanently Decrypt");
+			const prepared = await this.prepareBulkDecrypt(set, "永久解密", "永久解密");
 			if (!prepared) {
-				new Notice("Enclave: cancelled — no notes were changed.");
+				new Notice("Enclave: 已取消，没有笔记被修改。");
 				return false;
 			}
 			bulk = prepared;
 		}
 
 		const progress = new Notice(
-			`Enclave: permanently decrypting ${bulk.work.length + set.alreadyUnlocked.length} note(s)…`,
+			`Enclave: 正在永久解密 ${bulk.work.length + set.alreadyUnlocked.length} 篇笔记…`,
 			0
 		);
 		let decryptedCount = 0;
@@ -1467,7 +1469,7 @@ export default class EnclavePlugin extends Plugin {
 
 		new Notice(
 			this.bulkSummary(
-				"permanently decrypted",
+				"永久解密",
 				decryptedCount,
 				{ wrongPassword, otherPassword, changed, failed, skipped },
 				trouble
@@ -1481,11 +1483,11 @@ export default class EnclavePlugin extends Plugin {
 		const path = folder.isRoot() ? "" : folder.path;
 		const locked = this.settings.protectedFolders.some((f) => !path || f.path === path || f.path.startsWith(path + "/"));
 		const extra = locked
-			? ` The folder also stops being locked, so notes moved or created there later stay unencrypted.`
+			? ` 该文件夹也不再保持锁定，之后移入或新建到这里的笔记会保持明文。`
 			: "";
 		if (!(await this.permanentlyDecryptFiles(this.notesInFolder(folder), this.describeFolder(folder), extra))) return;
 		if (await this.forgetProtectedUnder(path)) {
-			new Notice(`Enclave: ${folder.isRoot() ? "no folders are" : `"${path}" is`} locked anymore.`);
+			new Notice(`Enclave: ${folder.isRoot() ? "所有文件夹都" : `"${path}" `}不再保持锁定。`);
 		}
 	}
 
@@ -1503,13 +1505,13 @@ export default class EnclavePlugin extends Plugin {
 		trouble: string[]
 	): string {
 		const parts: string[] = [];
-		if (issues.wrongPassword) parts.push(`${issues.wrongPassword} wrong password`);
-		if (issues.otherPassword) parts.push(`${issues.otherPassword} need a different password`);
-		if (issues.changed) parts.push(`${issues.changed} changed (retry)`);
-		if (issues.failed) parts.push(`${issues.failed} failed`);
-		if (issues.skipped) parts.push(`${issues.skipped} busy`);
-		const names = trouble.length ? ` Left unchanged: ${trouble.slice(0, 5).join(", ")}${trouble.length > 5 ? "…" : ""}.` : "";
-		return `Enclave: ${verb} ${ok} note(s)${parts.length ? ` — ${parts.join(", ")}` : ""}.${names}`;
+		if (issues.wrongPassword) parts.push(`${issues.wrongPassword} 篇密码错误`);
+		if (issues.otherPassword) parts.push(`${issues.otherPassword} 篇需要其他密码`);
+		if (issues.changed) parts.push(`${issues.changed} 篇内容已变化需重试`);
+		if (issues.failed) parts.push(`${issues.failed} 篇失败`);
+		if (issues.skipped) parts.push(`${issues.skipped} 篇正忙`);
+		const names = trouble.length ? `未修改：${trouble.slice(0, 5).join("、")}${trouble.length > 5 ? "…" : ""}。` : "";
+		return `Enclave: 已${verb} ${ok} 篇笔记${parts.length ? `（${parts.join("，")}）` : ""}。${names}`;
 	}
 
 	/**
@@ -1538,8 +1540,8 @@ export default class EnclavePlugin extends Plugin {
 			this.ribbonEl.setAttribute(
 				"aria-label",
 				count > 0
-					? `Enclave: ${count} note(s) unlocked — click to lock all`
-					: "Enclave: toggle lock on current note"
+					? `Enclave: ${count} 篇笔记已解锁，点击可全部锁定`
+					: "Enclave: 切换当前笔记的锁定状态"
 			);
 		}
 
@@ -1549,10 +1551,10 @@ export default class EnclavePlugin extends Plugin {
 		if (count === 0) return;
 		this.statusBarEl.empty();
 		setIcon(this.statusBarEl.createSpan({ cls: "enclave-status-icon" }), "unlock");
-		this.statusBarEl.createSpan({ cls: "enclave-status-text", text: `${count} unlocked` });
+		this.statusBarEl.createSpan({ cls: "enclave-status-text", text: `${count} 篇已解锁` });
 		this.statusBarEl.setAttribute(
 			"aria-label",
-			`Enclave: ${count} note(s) unlocked (plaintext on disk) — click to lock all`
+			`Enclave: ${count} 篇笔记已解锁（明文在磁盘上），点击可全部锁定`
 		);
 	}
 
@@ -1577,8 +1579,8 @@ export default class EnclavePlugin extends Plugin {
 		await this.persist();
 		if (exposed.length > 0) {
 			new Notice(
-				`Enclave: ${exposed.length} note(s) may have been left unlocked after an unclean shutdown. ` +
-					`Run "Enclave: secure notes left exposed" to re-encrypt them.`,
+				`Enclave: 非正常退出后可能有 ${exposed.length} 篇笔记仍处于解锁状态。` +
+					`请运行「Enclave: 重新加密崩溃后遗留的明文笔记」重新加密它们。`,
 				12000
 			);
 		}
@@ -1619,7 +1621,7 @@ export default class EnclavePlugin extends Plugin {
 		if (vaultNotes.length > 0) {
 			const password = await this.ensureVaultPassword(true);
 			if (!password) {
-				new Notice("Enclave: cancelled — no notes were changed.");
+				new Notice("Enclave: 已取消，没有笔记被修改。");
 				return;
 			}
 			for (const entry of vaultNotes) {
@@ -1630,10 +1632,10 @@ export default class EnclavePlugin extends Plugin {
 
 		for (const entry of noteNotes) {
 			const password = await this.promptPassword({
-				title: `Re-secure "${entry.file.basename}"`,
-				description: `This note used its own password, which can't be recovered after a crash. Set a NEW password to re-encrypt it (or cancel to leave it for now).`,
+				title: `重新加密 "${entry.file.basename}"`,
+				description: `这篇笔记用的是它自己的密码，崩溃后无法恢复。请设置一个新密码重新加密它，或取消以暂时保留现状。`,
 				confirm: true,
-				cta: "Lock",
+				cta: "锁定",
 			});
 			if (!password) {
 				stillExposed.push(entry);
@@ -1645,8 +1647,8 @@ export default class EnclavePlugin extends Plugin {
 
 		this.exposed = stillExposed;
 		new Notice(
-			`Enclave: secured ${secured} note(s).` +
-				(stillExposed.length ? ` ${stillExposed.length} still exposed.` : "")
+			`Enclave: 已重新加密 ${secured} 篇笔记。` +
+				(stillExposed.length ? `另有 ${stillExposed.length} 篇仍处于明文状态。` : "")
 		);
 	}
 
@@ -1670,16 +1672,16 @@ export default class EnclavePlugin extends Plugin {
 		const check = this.settings.vaultCheck;
 		const choosing = confirm && !check;
 		const password = await this.promptPassword({
-			title: choosing ? "Set vault password" : "Enter vault password",
+			title: choosing ? "设置库密码" : "输入库密码",
 			description: choosing
-				? `This password unlocks every note locked with the vault password. ${
+				? `这个密码用来解锁所有使用库密码锁定的笔记。${
 						this.device().rememberPasswords === "none"
-							? "You'll be asked for it every time you unlock or lock a note."
-							: "Once entered, it's remembered for the session (never written to disk)."
-					} There is no recovery.`
-				: `Enter your vault password to ${confirm ? "lock" : "unlock"} this note.`,
+							? "每次锁定或解锁笔记时都会要求输入。"
+							: "输入一次后会在本次会话中记住（从不写入磁盘）。"
+					}密码无法找回。`
+				: `输入库密码以${confirm ? "锁定" : "解锁"}这篇笔记。`,
 			confirm: choosing,
-			cta: confirm ? "Lock" : "Unlock",
+			cta: confirm ? "锁定" : "解锁",
 		});
 		if (!password) return null;
 		if (!confirm) {
@@ -1689,7 +1691,7 @@ export default class EnclavePlugin extends Plugin {
 			return password;
 		}
 		if (check && !(await passwordMatchesCheck(check, password))) {
-			new Notice("Enclave: that isn't your vault password.");
+			new Notice("Enclave: 这不是你的库密码。");
 			return null;
 		}
 		if (choosing) await this.saveVaultCheck(password);
@@ -1757,7 +1759,7 @@ export default class EnclavePlugin extends Plugin {
 		const separate = this.separatePasswords.size;
 		const vault = this.vaultPassword !== null;
 		if (unlocked === 0 && separate === 0 && !vault) {
-			return "Nothing is unlocked and no passwords are remembered on this device right now.";
+			return "当前这台设备上没有笔记处于解锁状态，也没有记住任何密码。";
 		}
 		const { autoLockMinutes, forgetPasswordMinutes } = this.device();
 		const state: string[] = [];
@@ -1765,33 +1767,34 @@ export default class EnclavePlugin extends Plugin {
 
 		if (unlocked > 0) {
 			const one = unlocked === 1;
-			state.push(one ? "1 note is unlocked" : `${unlocked} notes are unlocked`);
+			state.push(one ? "1 篇笔记处于解锁状态" : `${unlocked} 篇笔记处于解锁状态`);
 			const when = [
-				...(this.settings.autoLockOnClose ? [`when you leave ${one ? "it" : "them"}`] : []),
-				...(autoLockMinutes > 0 ? [`after ${minutes(autoLockMinutes)} without use`] : []),
+				...(this.settings.autoLockOnClose ? ["离开时"] : []),
+				...(autoLockMinutes > 0 ? [`闲置 ${minutes(autoLockMinutes)}后`] : []),
 				Platform.isMobile
-					? "when you switch apps"
+					? "切换应用时"
 					: this.settings.lockWhenHidden
-						? "when Obsidian is hidden or closed"
-						: "when you close Obsidian",
+						? "Obsidian 被隐藏或关闭时"
+						: "Obsidian 关闭时",
 			];
-			automatic.push(`${one ? "The note locks" : "They lock"} again ${listOf(when, "or")}.`);
+			automatic.push(`笔记会再次锁定：${listOf(when, "或")}。`);
 		}
 
 		const remembered = [
-			...(vault ? ["the vault password"] : []),
-			...(separate === 1 ? ["a separate password for 1 note or folder"] : []),
-			...(separate > 1 ? [`separate passwords for ${separate} notes or folders`] : []),
+			...(vault ? ["库密码"] : []),
+			...(separate === 1 ? ["独立密码（1 篇笔记或文件夹）"] : []),
+			...(separate > 1 ? [`独立密码（${separate} 篇笔记或文件夹）`] : []),
 		];
 		if (remembered.length > 0) {
-			state.push(`Enclave remembers ${listOf(remembered, "and")} temporarily`);
-			const subject = vault && separate === 0 ? "The password is" : "Passwords are";
+			state.push(`Enclave ${state.length > 0 ? "还" : ""}会临时记住${listOf(remembered, "和")}`);
 			automatic.push(
-				`${subject} forgotten ${forgetPasswordMinutes > 0 ? `after ${minutes(forgetPasswordMinutes)} unused` : "when you close Obsidian"}.`
+				`${vault && separate === 0 ? "该密码" : "这些密码"}会在${
+					forgetPasswordMinutes > 0 ? `闲置 ${minutes(forgetPasswordMinutes)}后被忘记` : "关闭 Obsidian 时被忘记"
+				}。`
 			);
 		}
 
-		return `${capitalize(listOf(state, "and"))}. ${automatic.join(" ")} You don't need to do anything; Lock and forget just does it now.`;
+		return `${state.join("，")}。${automatic.join("")}无需你操作，「锁定并忘记」会立即完成。`;
 	}
 
 	forgetSeparatePasswords(): void {
@@ -1810,8 +1813,8 @@ export default class EnclavePlugin extends Plugin {
 		const stillUnlocked = this.unlocked.size;
 		new Notice(
 			stillUnlocked > 0
-				? `Enclave: forgot all passwords, but ${stillUnlocked} note(s) couldn't be locked and keep their password until they are.`
-				: "Enclave: locked all notes and forgot all passwords."
+				? `Enclave: 已忘记所有密码，但有 ${stillUnlocked} 篇笔记无法锁定，它们在锁定之前仍会保留密码。`
+				: "Enclave: 已锁定所有笔记并忘记所有密码。"
 		);
 	}
 
@@ -1820,7 +1823,7 @@ export default class EnclavePlugin extends Plugin {
 		const now = this.now();
 		if (now - this.lastLockedEditNotice < 4000) return;
 		this.lastLockedEditNotice = now;
-		new Notice("Enclave: this note is locked. Unlock it to edit.");
+		new Notice("Enclave: 这篇笔记已锁定，请先解锁再编辑。");
 	}
 
 	private async saveVaultCheck(password: string): Promise<void> {
@@ -1846,14 +1849,14 @@ export default class EnclavePlugin extends Plugin {
 	/** What happens to a separate password after it's entered, for the prompts that set one. */
 	private separatePasswordHint(): string {
 		return this.device().rememberPasswords === "all"
-			? "Once entered, it's remembered for the session like the vault password."
-			: "You'll be asked for it every time you unlock.";
+			? "输入一次后，它会和库密码一样在本次会话中记住。"
+			: "每次解锁都会要求输入。";
 	}
 
 	forgetVaultPassword(silent = false): void {
 		this.vaultPassword = null;
 		this.vaultPasswordSetAt = 0;
-		if (!silent) new Notice("Enclave: forgot the cached vault password.");
+		if (!silent) new Notice("Enclave: 已忘记缓存的库密码。");
 	}
 
 	// ---- api for other plugins (see api.ts) -----------------------------
@@ -1901,14 +1904,14 @@ export default class EnclavePlugin extends Plugin {
 			}
 			if (text === null && !version.optional) {
 				password = await this.promptPassword({
-					title: "Resolve conflict",
-					description: `Enter the password for ${version.label} of "${name}".`,
-					cta: "Open",
+					title: "解决冲突",
+					description: `输入 "${name}" 的 ${version.label} 版本密码。`,
+					cta: "打开",
 				});
 				if (!password) return null;
 				text = await this.tryDecrypt(payload, password);
 				if (text === null) {
-					new Notice("Enclave: incorrect password.");
+					new Notice("Enclave: 密码不正确。");
 					return null;
 				}
 			}
@@ -1934,7 +1937,7 @@ export default class EnclavePlugin extends Plugin {
 				const source = versions[keep]?.content;
 				const payload = source ? parseLockedNote(source) : null;
 				close();
-				if (!password || !lock || !payload) throw new Error("Enclave: that version isn't an opened locked note.");
+				if (!password || !lock || !payload) throw new Error("Enclave: 该版本不是已解密的锁定笔记。");
 				return buildLockedNote(await this.seal(text, password, lock.scope, payload.iterations));
 			},
 		};
@@ -1985,7 +1988,7 @@ export default class EnclavePlugin extends Plugin {
 			protectedFolders: this.settings.protectedFolders.filter((f) => f.path !== path),
 		};
 		await this.persist();
-		new Notice(`Enclave: "${path}" is no longer kept locked.`);
+		new Notice(`Enclave: "${path}" 不再保持锁定。`);
 	}
 
 	/** Stop keeping a folder and its subfolders locked ("" means every folder). Returns whether any were. */
@@ -2026,20 +2029,20 @@ export default class EnclavePlugin extends Plugin {
 		const samples = check ? [] : (await this.separatePayloadsIn(folderPath)).slice(0, 5);
 		const choosing = !check && samples.length === 0;
 		const ask = choosing
-			? `Choose a password for "${folderPath}". Its notes, and notes added to it later, will need it to unlock. ${this.separatePasswordHint()} There is no recovery.`
-			: `Enter the password the notes in "${folderPath}" are locked with.`;
+			? `为 "${folderPath}" 设置一个密码。其中的笔记以及之后添加进来的笔记都需要它才能解锁。${this.separatePasswordHint()}密码无法找回。`
+			: `输入 "${folderPath}" 中笔记的锁定密码。`;
 		const password = await this.promptPassword({
-			title: `Password for "${folderPath}"`,
+			title: `"${folderPath}" 的密码`,
 			description: context ? `${context} ${ask}` : ask,
 			confirm: choosing,
-			cta: "Lock",
+			cta: "锁定",
 		});
 		if (!password) return null;
 		if (choosing) return password;
 		if (check ? await passwordMatchesCheck(check, password) : await this.opensAny(samples, password)) {
 			return password;
 		}
-		new Notice(`Enclave: that isn't the password for "${folderPath}". Nothing was locked.`);
+		new Notice(`Enclave: 这不是 "${folderPath}" 的密码，没有任何笔记被锁定。`);
 		return null;
 	}
 
@@ -2068,18 +2071,18 @@ export default class EnclavePlugin extends Plugin {
 	 */
 	private async lockIntoFolder(folder: ProtectedFolder, files: TFile[], how: "moved" | "created"): Promise<void> {
 		const one = files.length === 1;
-		const subject = `${one ? `"${files[0].basename}" was` : `${files.length} notes were`} ${
-			how === "moved" ? "moved into" : "created in"
+		const subject = `${one ? `"${files[0].basename}"` : `${files.length} 篇笔记`}已${
+			how === "moved" ? "移入" : "新建于"
 		} "${folder.path}"`;
-		const target = one ? `"${files[0].basename}"` : `${files.length} note(s)`;
+		const target = one ? `"${files[0].basename}"` : `${files.length} 篇笔记`;
 
 		// Without a password to type, moved notes need an explicit yes before they're locked.
 		const remembered = folder.scope === "note" ? this.rememberedPassword(folderKey(folder.path)) : null;
 		if (folder.scope === "vault" || remembered) {
-			const kind = folder.scope === "vault" ? "the vault password" : "a separate password";
+			const kind = folder.scope === "vault" ? "库密码" : "独立密码";
 			const agreed =
 				how === "created" ||
-				(await this.confirmMoveIn(`${subject}, which is locked with ${kind}. Lock ${one ? "it" : "them"} too?`));
+				(await this.confirmMoveIn(`${subject}，该文件夹使用${kind}锁定。是否也${one ? "锁定它" : "锁定这些笔记"}？`));
 			if (!agreed) {
 				for (const file of files) this.markPlain(file.path);
 				await this.persist();
@@ -2092,7 +2095,7 @@ export default class EnclavePlugin extends Plugin {
 
 		const password = await this.askFolderPassword(
 			folder.path,
-			`${subject}. Lock ${one ? "it" : "them"} too, or cancel to leave ${one ? "it" : "them"} unlocked.`
+			`${subject}。是否也${one ? "锁定它" : "锁定这些笔记"}？取消则保持解锁。`
 		);
 		if (!password) return;
 		this.rememberPassword(folderKey(folder.path), password);
@@ -2185,7 +2188,7 @@ export default class EnclavePlugin extends Plugin {
 
 	/** Confirmation for locking notes moved into a vault-password folder. Overridable for tests. */
 	protected confirmMoveIn(message: string): Promise<boolean> {
-		return new ConfirmModal(this.app, { title: "Enclave: lock moved notes?", message, cta: "Lock" }).ask();
+		return new ConfirmModal(this.app, { title: "Enclave: 锁定移入的笔记？", message, cta: "锁定" }).ask();
 	}
 
 	// ---- events & timers ------------------------------------------------
@@ -2254,19 +2257,16 @@ export default class EnclavePlugin extends Plugin {
 	}
 }
 
-/** "1 minute" / "5 minutes". */
+/** "1 分钟" / "5 分钟"。 */
 function minutes(n: number): string {
-	return n === 1 ? "1 minute" : `${n} minutes`;
+	return n === 1 ? "1 分钟" : `${n} 分钟`;
 }
 
-/** "a", "a or b", "a, b, or c" (with `and` or `or`). */
-function listOf(items: string[], conjunction: "and" | "or"): string {
-	if (items.length < 3) return items.join(` ${conjunction} `);
-	return `${items.slice(0, -1).join(", ")}, ${conjunction} ${items[items.length - 1]}`;
-}
-
-function capitalize(text: string): string {
-	return text.charAt(0).toUpperCase() + text.slice(1);
+/** "a"、"a 或 b"、"a、b 或 c"（连接词为 `和` 或 `或`；英文开头的项前留空格）。 */
+function listOf(items: string[], conjunction: "和" | "或"): string {
+	const sep = (item: string) => (/^[A-Za-z0-9]/.test(item) ? ` ${item}` : item);
+	if (items.length < 3) return items.map(sep).join(conjunction);
+	return `${items.slice(0, -1).map(sep).join("、")}${conjunction}${sep(items[items.length - 1])}`;
 }
 
 /** Key a remembered separate password by the note it opened. */

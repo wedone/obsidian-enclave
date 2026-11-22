@@ -28,10 +28,10 @@ export class ConfirmModal extends Modal {
 		new Setting(this.contentEl)
 			.addButton((btn) => {
 				cancelEl = btn.buttonEl;
-				btn.setButtonText("Cancel").onClick(() => this.close());
+				btn.setButtonText("取消").onClick(() => this.close());
 			})
 			.addButton((btn) => {
-				btn.setButtonText(this.opts.cta ?? "Confirm").setCta();
+				btn.setButtonText(this.opts.cta ?? "确认").setCta();
 				btn.onClick(() => {
 					this.confirmed = true;
 					this.close();

@@ -46,12 +46,12 @@ export class PasswordModal extends Modal {
 
 		const submit = () => this.trySubmit();
 
-		const pwSetting = new Setting(contentEl).setName("Password");
+		const pwSetting = new Setting(contentEl).setName("密码");
 		pwSetting.addText((text) => {
 			text.inputEl.type = "password";
 			text.inputEl.autocapitalize = "off";
 			text.inputEl.setAttribute("autocomplete", "off");
-			text.setPlaceholder("Enter password");
+			text.setPlaceholder("输入密码");
 			text.onChange((value) => {
 				this.password = value;
 				this.updateStrength(value);
@@ -76,11 +76,11 @@ export class PasswordModal extends Modal {
 		}
 
 		if (this.options.confirm) {
-			new Setting(contentEl).setName("Confirm password").addText((text) => {
+			new Setting(contentEl).setName("确认密码").addText((text) => {
 				text.inputEl.type = "password";
 				text.inputEl.autocapitalize = "off";
 				text.inputEl.setAttribute("autocomplete", "off");
-				text.setPlaceholder("Re-enter password");
+				text.setPlaceholder("再次输入密码");
 				text.onChange((value) => (this.confirmPassword = value));
 				text.inputEl.addEventListener("keydown", (e) => {
 					if (e.key === "Enter") {
@@ -93,7 +93,7 @@ export class PasswordModal extends Modal {
 
 		new Setting(contentEl).addButton((btn) =>
 			btn
-				.setButtonText(this.options.cta ?? "Confirm")
+				.setButtonText(this.options.cta ?? "确认")
 				.setCta()
 				.onClick(submit)
 		);
@@ -113,11 +113,11 @@ export class PasswordModal extends Modal {
 
 	private trySubmit(): void {
 		if (!this.password) {
-			this.flash("Password cannot be empty.");
+			this.flash("密码不能为空。");
 			return;
 		}
 		if (this.options.confirm && this.password !== this.confirmPassword) {
-			this.flash("Passwords do not match.");
+			this.flash("两次输入的密码不一致。");
 			return;
 		}
 		this.submitted = true;

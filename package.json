@@ -1,7 +1,7 @@
 {
 	"name": "enclave",
 	"version": "1.5.3",
-	"description": "Encrypt notes and whole folders with a vault password or their own password. Locked notes keep their names and links, lock again automatically, and can be decrypted for good at any time.",
+	"description": "用库密码或各自的密码加密笔记和整个文件夹。已锁定的笔记保留原有的名称与链接，会自动再次锁定，也可随时永久解密。",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

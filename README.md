@@ -1,77 +1,72 @@
 # Enclave
 
-**Lock your private notes with a password. Encrypted on disk, readable only in Obsidian.**
+**用密码锁定你的私人笔记。在磁盘上加密，只能在 Obsidian 里阅读。**
 
-A diary, health notes, client work, anything you'd rather keep to yourself: lock it with Enclave
-and it's encrypted with AES-256, the same standard banks and password managers use. Your sync
-service, your backups, your cloud folder and every other app only ever see scrambled text. In
-Obsidian, you unlock a note with your password, edit it as usual, and Enclave locks it again when
-you're done.
+日记、健康记录、客户的工作，任何你不想让别人看到的笔记：用 Enclave 锁定，它就会以
+AES-256 加密，银行和密码管理器用的也是这个标准。你的同步服务、备份、云盘文件夹和其他
+任何应用，看到的都只是乱码。在 Obsidian 里，你用密码解锁一篇笔记，照常编辑，用完后
+Enclave 会再次把它锁上。
 
-## Why Enclave
+## 为什么用 Enclave
 
-- **Lock with one click.** Right-click a note or a folder and choose **Lock**.
-- **Locks itself again.** When you leave the note, after a few idle minutes, and when you close or
-  hide Obsidian. On your phone, as soon as you switch apps.
-- **Lock whole folders.** Everything inside is locked, and new notes you write there are locked
-  too.
-- **One password, or several.** Use one vault password for everyday private notes, and a separate
-  password for the few that need more protection.
-- **Still part of your vault.** Locked notes keep their names, so links, search by title and the
-  graph keep working.
-- **On every device.** Desktop and mobile, with nothing else to install.
-- **Careful by design.** Every lock is checked before your note is replaced, and a mistyped
-  password is rejected instead of locking your notes with a typo.
+- **一键锁定。** 右键点击笔记或文件夹，选择 **锁定**。
+- **会再次自动锁定。** 离开笔记时、闲置几分钟后，以及关闭或隐藏 Obsidian 时。在手机上，
+  一切换到别的应用就会锁定。
+- **锁定整个文件夹。** 里面的所有内容都会被锁定，你在其中新建的笔记也会被锁定。
+- **一个密码，或者多个。** 日常的私人笔记用一个库密码，少数需要更多保护的笔记用独立
+  密码。
+- **仍然是你库的一部分。** 已锁定的笔记保留文件名，所以链接、按标题搜索和关系图谱都
+  照常可用。
+- **在每个设备上都能用。** 桌面端和移动端都可以，不需要额外安装别的程序。
+- **设计上就很谨慎。** 每次锁定在替换你的笔记之前都会校验，输错的密码会被拒绝，而不会
+  用一个错字把你的笔记锁上。
 
-**There is no password recovery.** Enclave never stores your passwords. If you forget one, the
-notes locked with it can't be opened anymore, by you or anyone else. Keep a backup of anything you
-can't afford to lose.
+**没有密码找回。** Enclave 从不保存你的密码。一旦忘记，用该密码锁定的笔记就再也打不开
+了，你自己不行，别人也不行。任何不能失去的内容，请留一份备份。
 
-## Sync safely with Envoy
+## 用 Envoy 安全同步
 
-[Envoy](https://github.com/flo-wolf/obsidian-envoy) syncs your vault across iPhone, Android, Mac,
-Windows and Linux through your own private GitLab project, for free. Used together, your locked
-notes only ever leave your device encrypted:
+[Envoy](https://github.com/flo-wolf/obsidian-envoy) 会通过你自己的私有 GitLab 项目，在
+iPhone、Android、Mac、Windows 和 Linux 之间免费同步你的库。两者配合使用时，你的已锁定
+笔记离开设备时始终是加密的：
 
-- Envoy never uploads a note while it's unlocked. It waits until Enclave locks it again.
-- The sync button can lock every open note first, so everything goes up in one go.
-- When a locked note changed on two devices, you can still merge the changes. Enclave decrypts both
-  versions in memory only and locks the result again.
+- Envoy 从不在笔记解锁期间上传它。它会等到 Enclave 把它重新锁定。
+- 同步按钮可以先把所有打开的笔记锁定，这样所有内容就能一次传上去。
+- 当一篇已锁定的笔记在两台设备上都发生了改动时，你仍然可以合并这些改动。Enclave 只在
+  内存中解密两个版本，然后重新锁定合并后的结果。
 
-Enclave works with any other sync too, such as iCloud or Obsidian Sync. Just keep in mind that while
-a note is unlocked, its text sits on disk unencrypted, and those services may upload it in that
-moment.
+Enclave 也能配合其他任何同步方式使用，比如 iCloud 或 Obsidian Sync。只是要记住：笔记解锁
+期间，它的文字是未加密地放在磁盘上的，那些服务可能会在那一刻把它上传。
 
-## Get started
+## 开始使用
 
-1. **Install Enclave.** In Obsidian, open **Settings → Community plugins → Browse**, search for
-   **Enclave**, then select **Install** and **Enable**.
-2. **Lock a note.** Right-click it in the file explorer and choose **Enclave: lock note**. The first
-   time, you choose your vault password.
-3. **Open it again.** Select **Unlock** on the note and enter your password. When you leave the
-   note, it locks itself.
+1. **安装 Enclave。** 在 Obsidian 中打开 **设置 → 第三方插件 → 浏览**，搜索 **Enclave**，
+   然后选择 **安装** 和 **启用**。
+2. **锁定一篇笔记。** 在文件浏览器里右键点击它，选择 **Enclave: 锁定笔记**。第一次使用
+   时，你需要设置库密码。
+3. **再次打开它。** 在这篇笔记上选择 **解锁** 并输入你的密码。离开笔记时，它会自行锁定。
 
-To protect a whole folder, right-click it and choose **Enclave: lock folder**. While notes are
-unlocked, the status bar shows how many, and the lock icon in the left sidebar locks them all at
-once.
+要保护整个文件夹，右键点击它并选择 **Enclave: 锁定文件夹**。有笔记处于解锁状态时，状态栏
+会显示数量，左侧边栏的锁图标可以一次性把它们全部锁定。
 
-## What's encrypted
+## 加密的内容
 
-| Encrypted | Not encrypted |
+| 加密 | 不加密 |
 |---|---|
-| The note's text | The note's name |
-| The note's properties | Folder names |
-| | Images, PDFs and other attachments |
+| 笔记的文字 | 笔记的名称 |
+| 笔记的属性 | 文件夹名称 |
+| | 图片、PDF 和其他附件 |
 
-## Learn more
+## 了解更多
 
-The [Enclave guide](https://github.com/flo-wolf/obsidian-enclave/blob/main/docs/guide.md) covers
-everything in detail: both kinds of password, locking folders and several notes at once, all
-commands and settings, how the encryption works, and what happens while a note is unlocked.
+[Enclave 指南](https://github.com/flo-wolf/obsidian-enclave/blob/main/docs/guide.md)详细介绍了
+所有内容：两种密码、锁定文件夹和一次锁定多篇笔记、所有命令与设置、加密的工作原理，以及
+笔记解锁期间会发生什么。
 
-## Credits and license
+## 致谢与许可
 
-Enclave is a fork of [Locky](https://github.com/boinkdevteam/obsidian-locky) by boinkdevteam, which
-is itself a fork of [Lockbox](https://github.com/danzar/Obsidian-Locker) by Danzar. Licensed under
-the GNU General Public License v3.0 or later, like both projects it is based on; see
-[`LICENSE`](https://github.com/flo-wolf/obsidian-enclave/blob/main/LICENSE).
+Enclave 是 boinkdevteam 的 [Locky](https://github.com/boinkdevteam/obsidian-locky) 的
+分支，而 Locky 本身又是 Danzar 的 [Lockbox](https://github.com/danzar/Obsidian-Locker) 的
+分支。与它所基于的这两个项目一样，本项目采用 GNU General Public License v3.0 或更高版本
+许可；参见
+[`LICENSE`](https://github.com/flo-wolf/obsidian-enclave/blob/main/LICENSE)。

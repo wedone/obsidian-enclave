@@ -37,7 +37,7 @@ export interface EnclavePayload {
 
 /** Thrown when decryption fails (wrong password or corrupted data). */
 export class DecryptError extends Error {
-	constructor(message = "Incorrect password or the encrypted data is corrupted.") {
+	constructor(message = "密码错误，或加密数据已损坏。") {
 		super(message);
 		this.name = "DecryptError";
 	}
@@ -46,7 +46,7 @@ export class DecryptError extends Error {
 /** Thrown when the post-encryption round-trip self-check fails. */
 export class SelfCheckError extends Error {
 	constructor(
-		message = "Encryption self-check failed: the ciphertext did not decrypt back to the original. Aborting to avoid data loss."
+		message = "加密自检失败：密文无法解密回原始内容。为避免数据丢失，已中止。"
 	) {
 		super(message);
 		this.name = "SelfCheckError";
@@ -151,14 +151,14 @@ export async function decryptContent(
 	// safely rather than e.g. freezing the UI with an absurd iteration count or
 	// silently running an algorithm we never produced.
 	if (payload.alg !== "AES-GCM" || payload.kdf !== "PBKDF2" || payload.hash !== "SHA-256") {
-		throw new DecryptError("Unsupported or unrecognized encryption parameters.");
+		throw new DecryptError("加密参数不受支持或无法识别。");
 	}
 	if (
 		!Number.isInteger(payload.iterations) ||
 		payload.iterations < MIN_ITERATIONS ||
 		payload.iterations > MAX_ITERATIONS
 	) {
-		throw new DecryptError("Encryption parameters are out of the accepted range.");
+		throw new DecryptError("加密参数超出允许范围。");
 	}
 
 	try {
@@ -166,7 +166,7 @@ export async function decryptContent(
 		const iv = fromBase64(payload.iv);
 		const ct = fromBase64(payload.ct);
 		if (salt.length !== SALT_BYTES || iv.length !== IV_BYTES || ct.length === 0) {
-			throw new DecryptError("Encrypted data is malformed.");
+			throw new DecryptError("加密数据格式错误。");
 		}
 		const key = await deriveKey(password, salt, payload.iterations);
 		const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);

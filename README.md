@@ -1,5 +1,7 @@
 # Enclave
 
+简体中文 | [English](README.en.md)
+
 **用密码锁定你的私人笔记。在磁盘上加密，只能在 Obsidian 里阅读。**
 
 日记、健康记录、客户的工作，任何你不想让别人看到的笔记：用 Enclave 锁定，它就会以
@@ -40,8 +42,9 @@ Enclave 也能配合其他任何同步方式使用，比如 iCloud 或 Obsidian 
 
 ## 开始使用
 
-1. **安装 Enclave。** 在 Obsidian 中打开 **设置 → 第三方插件 → 浏览**，搜索 **Enclave**，
-   然后选择 **安装** 和 **启用**。
+1. **安装 Enclave。** 用 [BRAT](https://github.com/TfTHacker/obsidian42-brat) 添加仓库
+   `wedone/obsidian-enclave`，或从[最新发布](https://github.com/wedone/obsidian-enclave/releases/latest)
+   手动下载三个文件（详见[指南](docs/guide.md)）。
 2. **锁定一篇笔记。** 在文件浏览器里右键点击它，选择 **Enclave: 锁定笔记**。第一次使用
    时，你需要设置库密码。
 3. **再次打开它。** 在这篇笔记上选择 **解锁** 并输入你的密码。离开笔记时，它会自行锁定。
@@ -59,7 +62,7 @@ Enclave 也能配合其他任何同步方式使用，比如 iCloud 或 Obsidian 
 
 ## 了解更多
 
-[Enclave 指南](https://github.com/flo-wolf/obsidian-enclave/blob/main/docs/guide.md)详细介绍了
+[Enclave 指南](docs/guide.md)详细介绍了
 所有内容：两种密码、锁定文件夹和一次锁定多篇笔记、所有命令与设置、加密的工作原理，以及
 笔记解锁期间会发生什么。
 
@@ -69,4 +72,4 @@ Enclave 是 boinkdevteam 的 [Locky](https://github.com/boinkdevteam/obsidian-lo
 分支，而 Locky 本身又是 Danzar 的 [Lockbox](https://github.com/danzar/Obsidian-Locker) 的
 分支。与它所基于的这两个项目一样，本项目采用 GNU General Public License v3.0 或更高版本
 许可；参见
-[`LICENSE`](https://github.com/flo-wolf/obsidian-enclave/blob/main/LICENSE)。
+[`LICENSE`](LICENSE)。

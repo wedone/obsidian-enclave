@@ -1,8 +1,7 @@
 # Enclave 指南
 
-详尽介绍 [Enclave](https://github.com/flo-wolf/obsidian-enclave) 的一切：两种密码、锁定
-笔记与文件夹、命令、哪些内容加密哪些不加密、加密的工作原理、设置，以及面向同步插件的
-接口。
+详尽介绍 Enclave 的一切：两种密码、锁定笔记与文件夹、命令、哪些内容加密哪些不加密、加密的
+工作原理、设置，以及面向同步插件的接口。
 
 **没有密码找回。** 如果你忘记了某个密码，用该密码锁定的笔记就再也打不开了。任何不能
 失去的内容，请留一份备份。
@@ -11,21 +10,21 @@
 
 Enclave 需要 Obsidian 1.13 或更高版本。
 
-**从第三方插件安装**（推荐）
+本仓库是 [flo-wolf/obsidian-enclave](https://github.com/flo-wolf/obsidian-enclave) 的简体中文界面分支，
+界面与文档已全部汉化；英文原文见 [README.en.md](../README.en.md) 与
+[上游指南](https://github.com/flo-wolf/obsidian-enclave/blob/main/docs/guide.md)。
 
-1. 在 Obsidian 中打开 **设置 → 第三方插件**，选择 **浏览**。
-2. 搜索 **Enclave**，然后选择 **安装** 和 **启用**。
+插件 id 与上游相同（`enclave`），所以同一时间只能装其中一个：装了这个分支，就会替换掉上游版本。
 
-或者打开 [Obsidian 社区目录中的 Enclave](https://community.obsidian.md/plugins/enclave)。
-
-**用 BRAT 安装**（在进入目录之前体验新版本）
+**用 BRAT 安装**（推荐，本分支的安装方式）
 
 1. 从第三方插件中安装 [BRAT](https://github.com/TfTHacker/obsidian42-brat)。
-2. 在 BRAT 中添加仓库 `flo-wolf/obsidian-enclave`。
+2. 在 BRAT 中添加仓库 `wedone/obsidian-enclave`。
+3. 在 **设置 → 第三方插件** 中启用 **Enclave**。
 
 **手动安装**
 
-1. 从[最新发布](https://github.com/flo-wolf/obsidian-enclave/releases/latest)下载
+1. 从[最新发布](https://github.com/wedone/obsidian-enclave/releases/latest)下载
    `main.js`、`manifest.json` 和 `styles.css`。
 2. 把它们复制到 `<your-vault>/.obsidian/plugins/enclave/`。
 3. 在 **设置 → 第三方插件** 中启用 **Enclave**。

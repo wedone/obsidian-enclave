@@ -1,2 +1,4 @@
-- 全新的、更简短的 README，介绍 Enclave 能为你做什么，所有细节都在 [Enclave 指南](https://github.com/flo-wolf/obsidian-enclave/blob/main/docs/guide.md)中。
-- 认识一下 [Envoy](https://github.com/flo-wolf/obsidian-envoy)：通过你自己的私有 GitLab 项目，在 iPhone、Android、Mac、Windows 和 Linux 之间同步你的库。配合 Enclave，你的已锁定笔记离开设备时始终是加密的。
+- 界面与文档全面汉化为简体中文：命令、右键菜单、通知提示、设置页、确认与密码弹窗、状态栏、密码强度提示。
+- 文档汉化：README 与 [Enclave 指南](https://github.com/wedone/obsidian-enclave/blob/main/docs/guide.md) 均为中文，英文原文保留在 [README.en.md](https://github.com/wedone/obsidian-enclave/blob/main/README.en.md)。
+- 版本号带 `-zh` 后缀，用于与本仓库之外的英文版区分；功能与上游 Enclave 1.5.3 一致。
+- 安装方式见[指南的安装一节](https://github.com/wedone/obsidian-enclave/blob/main/docs/guide.md#安装)：用 BRAT 添加仓库 `wedone/obsidian-enclave`，或手动下载 `main.js`、`manifest.json`、`styles.css`。
